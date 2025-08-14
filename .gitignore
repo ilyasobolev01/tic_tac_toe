@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Environment files (secrets)
+.venv
+.env
+.env.local
+
+# Build folders
+dist/
+build/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Local VS Code settings
+.vscode/
+
+# Cache folders
+__pycache__/
+.pytest_cache/
+
+# .obsidian folder (was used to write the README.md)
+.obsidian/
