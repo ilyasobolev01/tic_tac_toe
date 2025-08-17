@@ -18,6 +18,7 @@ This test suite verifies the correctness of the functions defined in
 # https://www.google.com/url?sa=E&q=http://xunitpatterns.com/Arrange%20Act%20Assert.html
 
 from game_logic import create_board
+from game_logic import check_winner
 
 
 def test_create_board_returns_a_clean_3x3_grid():
@@ -32,3 +33,34 @@ def test_create_board_returns_a_clean_3x3_grid():
 
     # Assert
     assert actual_board == expected_board
+
+
+def test_check_winner_with_horizontal_win():
+    """Should return True for a horizontal win."""
+    board = [["X", "X", "X"], ["O", " ", "O"], [" ", " ", " "]]
+    assert check_winner(board, "X") is True
+
+
+def test_check_winner_with_vertical_win():
+    """Should return True for a vertical win."""
+    board = [["O", "X", " "], ["O", "X", " "], [" ", "X", "O"]]
+    assert check_winner(board, "X") is True
+
+
+def test_check_winner_with_diagonal_win():
+    """Should return True for a diagonal win."""
+    board = [["O", " ", "X"], [" ", "X", "O"], ["X", " ", " "]]
+    assert check_winner(board, "X") is True
+
+
+def test_check_winner_on_ongoing_game():
+    """Should return False when no winner is present."""
+    board = [["X", "O", "X"], ["O", " ", " "], [" ", " ", " "]]
+    assert check_winner(board, "X") is False
+    assert check_winner(board, "O") is False
+
+
+def test_check_winner_returns_false_for_other_player():
+    """Should return False if we check for 'O' but 'X' won."""
+    board = [["X", "X", "X"], ["O", " ", "O"], [" ", " ", " "]]
+    assert check_winner(board, "O") is False
