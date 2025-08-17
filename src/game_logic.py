@@ -39,6 +39,10 @@ def check_winner(board: List[List[str]], player: str) -> bool:
 
     return False
 
+def is_board_full(board: List[List[str]]) -> bool:
+    """Checks if the game board is full"""
+    return all(" " not in row for row in board)
+
 
 def get_available_moves(board) -> List[Tuple[int, int]]:
     """Returns a list of all available (empty) moves on the board."""
