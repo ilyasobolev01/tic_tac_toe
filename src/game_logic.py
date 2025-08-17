@@ -39,6 +39,7 @@ def check_winner(board: List[List[str]], player: str) -> bool:
 
     return False
 
+
 def is_board_full(board: List[List[str]]) -> bool:
     """Checks if the game board is full"""
     return all(" " not in row for row in board)

@@ -84,22 +84,17 @@ def test_get_available_moves_with_empty_cells():
 def test_is_board_full_with_full_board():
     """Should return True for a full board"""
 
-board = [
-        ["X", "O", "X"],
-        ["O", "X", "O"],
-        ["X", "X", "O"]
-    ]
+
+board = [["X", "O", "X"], ["O", "X", "O"], ["X", "X", "O"]]
 
 assert is_board_full(board) is True
+
 
 def test_is_board_full_with_empty_board():
     """Should return False for an empty board"""
 
-board = [
-        [" ", " ", " "],
-        [" ", " ", " "],
-        [" ", " ", " "]
-    ]
+
+board = [[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]]
 
 assert is_board_full(board) is False
 
@@ -107,10 +102,7 @@ assert is_board_full(board) is False
 def test_is_board_full_for_ongoing_game():
     """Should return False for an onging game"""
 
-board = [
-        ["X", "X", "O"],
-        ["O", " ", " "],
-        ["", " ", " "]
-    ]
+
+board = [["X", "X", "O"], ["O", " ", " "], ["", " ", " "]]
 
 assert is_board_full(board) is False
