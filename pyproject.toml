@@ -7,6 +7,7 @@ description = "An unbeatable Tic-Tac-Toe TUI game powered by the Minimax algorit
 authors = ["Ilya Sobolev <ilyasobolev750@gmail.com>"]
 license = "MIT"
 readme = "README.md"
+packages = [{include = "*.py", from = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.8.1" 
@@ -22,3 +23,8 @@ mypy = "^1.9.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+pythonpath = [
+  "src"
+]
