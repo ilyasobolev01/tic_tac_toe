@@ -8,7 +8,7 @@ winners, and determining game-end conditions like a draw.
 This module knows nothing about the UI, the AI, or how the game is run.
 """
 
-from typing import List  # for older versions of Python
+from typing import List, Tuple  # for older versions of Python
 
 
 def create_board() -> List[List[str]]:
@@ -38,3 +38,14 @@ def check_winner(board: List[List[str]], player: str) -> bool:
         return True
 
     return False
+
+
+def get_available_moves(board) -> List[Tuple[int, int]]:
+    """Returns a list of all available (empty) moves on the board."""
+    moves = []
+
+    for row_idx, row in enumerate(board):
+        for col_idx, cell in enumerate(row):
+            if cell == " ":
+                moves.append((row_idx, col_idx))
+    return moves
