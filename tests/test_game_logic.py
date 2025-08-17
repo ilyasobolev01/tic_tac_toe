@@ -1,3 +1,14 @@
+"""
+Unit tests for the core game logic module.
+
+This test suite verifies the correctness of the functions defined in
+`src/game_logic.py`. It covers scenarios such as:
+- Board creation.
+- Win condition checking (horizontal, vertical, diagonal).
+- Draw condition checking.
+- Retrieval of available moves.
+"""
+
 # Sources:
 # 1. Roy Osherove's Naming Standards for Tests - https://www.google.com/url?sa=E&q=https%3A%2F%2Fosherove.com%2Fblog%2F2005%2F4%2F3%2Fnaming-standards-for-unit-tests.html
 # 2. Abstract: Behavior-Driven Developement - Given-When-Then
