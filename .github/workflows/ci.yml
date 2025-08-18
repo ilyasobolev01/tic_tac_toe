@@ -1,19 +1,8 @@
 # GitHub Actions Workflow for Continuous Integration (CI)
 #
-# Purpose:
-# This workflow automatically runs a suite of quality checks on every push
-# to the `main` branch and on every pull request targeting `main`.
-# Its goal is to ensure that all code merged into the main branch is
-# tested, linted, and type-checked.
-#
-# How it works:
-# It uses Nox to manage and run all checks, ensuring that the CI environment
-# is identical to the local development environment. The job runs on a matrix
-# of Python versions to guarantee compatibility.
-
-
-# This workflow will install Python dependencies, run tests and lint with multiple versions of Python
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+# This workflow automatically runs tests, linting, and type checks
+# on pushes to main and on pull requests targeting main.
+# It ensures that all code merged into main passes quality checks.
 
 name: CI
 
@@ -23,7 +12,6 @@ on:
   pull_request:
     branches: [ "main" ]
 
-# This permission is a good security practice, it prevents the workflow from doing more than it needs to.
 permissions:
   contents: read
 
@@ -31,25 +19,26 @@ jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
-      # This ensures that all Python versions are tested, even if one fails.
       fail-fast: false
       matrix:
         python-version: ["3.8", "3.10", "3.11"]
 
     steps:
-    - uses: actions/checkout@v4
+      # Checkout repository
+      - uses: actions/checkout@v4
 
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
-      with:
-        python-version: ${{ matrix.python-version }}
+      # Set up Python
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
 
-    - name: Install Nox and Poetry
-      run: |
-        python -m pip install --upgrade pip
-        pip install nox poetry==1.8.4
+        - name: Install Nox and Poetry
+        run: |
+          python -m pip install --upgrade pip
+          pip install nox poetry
 
-    - name: Run Nox sessions
-      # This single command runs all our quality checks (tests, linting, typing)
-      # defined in the noxfile.py for the specific Python version.
-      run: nox -p ${{ matrix.python-version }}
+      - name: Run Nox sessions
+        # This single command runs all our quality checks (tests, linting, typing)
+        # as defined in the noxfile.py for the specific Python version.
+        run: nox -p ${{ matrix.python-version }}
