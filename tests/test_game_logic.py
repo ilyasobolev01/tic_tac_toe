@@ -17,7 +17,12 @@ This test suite verifies the correctness of the functions defined in
 # 4. Arrange-Act-Assert:
 # https://www.google.com/url?sa=E&q=http://xunitpatterns.com/Arrange%20Act%20Assert.html
 
-from game_logic import create_board, check_winner, get_available_moves
+from game_logic import (
+    create_board,
+    check_winner,
+    is_board_full,
+    get_available_moves,
+)
 
 
 def test_create_board_returns_a_clean_3x3_grid():
@@ -79,3 +84,30 @@ def test_get_available_moves_with_empty_cells():
     actual_moves = get_available_moves(board)
 
     assert set(expected_moves) == set(actual_moves)
+
+
+def test_is_board_full_with_full_board():
+    """Should return True for a full board"""
+
+
+board = [["X", "O", "X"], ["O", "X", "O"], ["X", "X", "O"]]
+
+assert is_board_full(board) is True
+
+
+def test_is_board_full_with_empty_board():
+    """Should return False for an empty board"""
+
+
+board = [[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]]
+
+assert is_board_full(board) is False
+
+
+def test_is_board_full_for_ongoing_game():
+    """Should return False for an onging game"""
+
+
+board = [["X", "X", "O"], ["O", " ", " "], ["", " ", " "]]
+
+assert is_board_full(board) is False
