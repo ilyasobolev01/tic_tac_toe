@@ -1,0 +1,63 @@
+/* Main application styles for the Tic-Tac-Toe TUI. */
+
+Screen {
+    background: #282c34;
+}
+
+/* 
+ * A dedicated container to perfectly center the game grid.
+ * It takes up the full screen and aligns its direct child.
+*/
+#center-container {
+    align: center middle;
+    width: 100%;
+    height: 100%;
+}
+
+#game-grid {
+    layout: grid;
+    grid-size: 3 3;
+    grid-gutter: 1;
+    width: 30;
+    height: 15;
+}
+
+/* Styles for a single cell in the grid. */
+TicTacToeCell {
+    width: 1fr;
+    height: 1fr;
+    background: #44475a;
+    content-align: center middle;
+    text-style: bold;
+}
+
+TicTacToeCell:hover {
+    background: #6272a4;
+}
+
+/* The main status label at the top of the screen. */
+#info-label {
+    dock: top;
+    width: 100%;
+    text-align: center;
+    margin: 2 0;
+    color: #f8f8f2;
+}
+
+/* --- Game-end state classes --- */
+/* These classes are added to the Screen to color-code the result. */
+
+.win TicTacToeCell {
+    background: #50fa7b; /* Green */
+    color: #282a36;
+}
+
+.loss TicTacToeCell {
+    background: #ff5555; /* Red */
+    color: #f8f8f2;
+}
+
+.draw TicTacToeCell {
+    background: #8be9fd; /* Cyan/Blue */
+    color: #282a36;
+}
