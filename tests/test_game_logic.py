@@ -17,7 +17,12 @@ This test suite verifies the correctness of the functions defined in
 # 4. Arrange-Act-Assert:
 # https://www.google.com/url?sa=E&q=http://xunitpatterns.com/Arrange%20Act%20Assert.html
 
-from game_logic import create_board, check_winner, is_board_full, get_available_moves
+from game_logic import (
+    create_board,
+    check_winner,
+    is_board_full,
+    get_available_moves,
+)
 
 
 def test_create_board_returns_a_clean_3x3_grid():
