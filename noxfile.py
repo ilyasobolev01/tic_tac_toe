@@ -15,24 +15,39 @@ to ensure code quality and correctness.
 
 import nox
 
-# Sets the default sessions to run when `nox` is called without arguments.
+
 nox.options.sessions = ["tests", "lint"]
 
 PYTHON_VERSIONS = ["3.8", "3.10", "3.11"]
 
 
+def export_requirements(session):
+    session.run(
+        "poetry",
+        "export",
+        "--with",
+        "dev",
+        "--format",
+        "requirements.txt",
+        "--output",
+        "requirements.txt",
+        "--without-hashes",
+        external=True,
+    )
+
+
 @nox.session(python=PYTHON_VERSIONS)
 def tests(session):
     """Run the test suite with pytest."""
-    session.install("poetry")
-    session.run("poetry", "install", "--no-interaction")
-    session.run("poetry", "run", "pytest")
+    export_requirements(session)
+    session.install("-r", "requirements.txt")
+    session.install("-e", ".")
+    session.run("pytest")
 
 
 @nox.session(python=PYTHON_VERSIONS[-1])
 def lint(session):
     """Lint with flake8 and check formatting with black."""
-    # The src and tests directories are specified for linting.
     args = session.posargs or ["src", "tests"]
     session.install("black", "flake8")
     session.run("flake8", *args)
@@ -42,8 +57,8 @@ def lint(session):
 @nox.session(python=PYTHON_VERSIONS[-1])
 def typing(session):
     """Type-check using mypy."""
-    # Mypy needs project dependencies to be installed.
-    session.install("poetry")
-    session.run("poetry", "install", "--no-interaction")
+    export_requirements(session)
+    session.install("-r", "requirements.txt")
+    session.install("-e", ".")
     session.install("mypy")
-    session.run("mypy", "src")
+    session.run("mypy", "src", "tests")
