@@ -19,16 +19,39 @@ Its key responsibilities include:
 from textual.app import App, ComposeResult
 from textual.containers import Container
 from textual.widgets import Static
+from textual.message import Message
+from textual.reactive import reactive
+
+from game_logic import create_board
+from ai_player import HUMAN_PLAYER
 
 
 class TicTacToeCell(Static):
     """A widget representing a single, clickable cell in the Tic-Tac-Toe grid."""
 
-    pass
+    def __init__(self, id: str, row: int, col: int) -> None:
+        super().__init__()
+        self.row = row
+        self.col = col
+
+    class Clicked(Message):
+        """A custom message to be sent when a cell is clicked."""
+
+        def __init__(self, row: int, col: int) -> None:
+            self.row = row
+            self.col = col
+            super().__init__()
+
+    def on_click(self) -> None:
+        """Handles a mouse click event on this cell."""
+        self.post_message(self.Clicked(self.row, self.col))
 
 
 class TicTacToeApp(App):
     """The main Textual application for the Tic-Tac-Toe game."""
+
+    board = reactive(create_board)
+    current_player = reactive(HUMAN_PLAYER)
 
     def compose(self):
         """
@@ -42,7 +65,20 @@ class TicTacToeApp(App):
             with Container(id="game-grid"):
                 for r in range(3):
                     for c in range(3):
-                        yield TicTacToeCell(id=f"cell-{r}-{c}")
+                        yield TicTacToeCell(row=r, col=c, id=f"cell-{r}-{c}")
+
+    def on_tic_tac_toe_cell_clicked(self, message: TicTacToeCell.Clicked) -> None:
+        """A message handler that is called when any TicTacToeCell posts a `Clicked` message."""
+        if self.board[message.row][message.col] == " ":
+            self.board[message.row][message.col] = HUMAN_PLAYER
+            self.update_board_display()
+
+    def update_board_display(self) -> None:
+        """Updates the visual display of the grid to match the internal `self.board` state."""
+        for r in range(3):
+            for c in range(3):
+                cell_widget = self.query_one(f"#cell-{r}-{c}", TicTacToeCell)
+                cell_widget.update(self.board[r][c])
 
 
 if __name__ == "__main__":
