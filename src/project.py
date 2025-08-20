@@ -18,6 +18,7 @@ Its key responsibilities include:
 - Handling the end-of-game sequence (displaying results and exiting).
 """
 
+import logging
 from pathlib import Path
 
 from textual.app import App, ComposeResult
@@ -28,6 +29,14 @@ from textual.reactive import reactive
 
 from game_logic import create_board, check_winner, is_board_full
 from ai_player import get_ai_move, HUMAN_PLAYER, AI_PLAYER
+
+
+logging.basicConfig(
+    level=logging.INFO,  # Log INFO level messages and above (DEBUG, INFO, WARNING, ERROR, CRITICAL)  # noqa: E501
+    filename="tictactoe.log",  # The file to write logs to
+    filemode="w",  # 'w' overwrites the file on each run, 'a' appends to it
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+)
 
 CSS_PATH = Path(__file__).parent.parent / "assets" / "main.css"
 
@@ -41,6 +50,10 @@ class TicTacToeCell(Static):
         super().__init__(**kwargs)
         self.row = row
         self.col = col
+
+    def on_mount(self) -> None:
+        """Called when the app is first mounted."""
+        logging.info("Application started.")
 
     class Clicked(Message):
         """A custom message to be sent when a cell is clicked."""
@@ -87,7 +100,10 @@ class TicTacToeApp(App):
         if self.game_over or self.current_player != HUMAN_PLAYER:
             return
 
-        if self.board[message.row][message.col] == " ":
+        if self.board[message.row][message.col] == " ":  # noqa: E501
+            logging.info(
+                f"Human player moved to ({message.row}, {message.col})."
+            )  # noqa: E501
             self.board[message.row][message.col] = HUMAN_PLAYER
             self.update_board_display()
             self.check_game_state()
@@ -98,11 +114,16 @@ class TicTacToeApp(App):
                     "AI is thinking..."
                 )  # noqa: E501
                 self.set_timer(1.0, self.make_ai_move)
+        else:
+            logging.warning(
+                f"Human player attempted an invalid move to ({message.row}, {message.col})."  # noqa: E501
+            )
 
     def make_ai_move(self) -> None:
         """Calculates and performs the AI's move."""
         row, col = get_ai_move(self.board)
         self.board[row][col] = AI_PLAYER
+        logging.info(f"AI player moved to ({row}, {col}).")
         self.update_board_display()
         self.check_game_state()
 
@@ -119,11 +140,13 @@ class TicTacToeApp(App):
             self.query_one("#info-label", Static).update(
                 f"Player {self.winner} wins!"
             )  # noqa: E501
+            logging.info(f"Game over. Winner: {self.winner}.")
             self.update_colors()
             self.set_timer(2.0, self.exit_game)
         elif is_board_full(self.board):
             self.game_over = True
             self.query_one("#info-label", Static).update("It's a draw!")
+            logging.info("Game over. Result: Draw.")
             self.update_colors()
             self.set_timer(2.0, self.exit_game)
 
@@ -145,6 +168,7 @@ class TicTacToeApp(App):
 
     def exit_game(self) -> None:
         """A simple method to exit the application."""
+        logging.info("Application shutting down.")
         self.exit()
 
 
