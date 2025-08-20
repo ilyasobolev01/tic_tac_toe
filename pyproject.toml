@@ -10,9 +10,10 @@ readme = "README.md"
 packages = [{include = "*.py", from = "src"}]
 
 [tool.poetry.dependencies]
-python = "^3.8.1" 
+python = "^3.9" 
 textual = "^0.58.0"
 pathlib = "^1.0.1"
+pytest-asyncio = "^1.1.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0.0"
