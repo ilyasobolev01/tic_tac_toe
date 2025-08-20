@@ -18,7 +18,7 @@ import nox
 
 nox.options.sessions = ["tests", "lint"]
 
-PYTHON_VERSIONS = ["3.8", "3.10", "3.11"]
+PYTHON_VERSIONS = ["3.9", "3.10", "3.11"]
 
 
 def export_requirements(session):
